@@ -49,7 +49,7 @@ functions:
           bucket: ${self:custom.s3BucketName}
           event: s3:ObjectCreated:*
           rules:
-            - suffix: .pdf
+              - suffix: .pdf
 
 resources:
   Resources:
