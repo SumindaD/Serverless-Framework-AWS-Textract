@@ -3,7 +3,7 @@ service: textract-ocr-service
 custom:
   currentStage: ${opt:stage, self:provider.stage}
   s3BucketName: textractbucket-#{AWS::AccountId}-${self:custom.currentStage}
-  snsTopicName: pdfExtractionDone
+  snsTopicName: pdfExtractionDone-#{AWS::AccountId}-${self:custom.currentStage}
   snsFullAccessRoleName: AwsSnsFullAccessRole-#{AWS::AccountId}-${self:custom.currentStage}
   lambdaRunTime: python3.7
 
@@ -42,8 +42,7 @@ functions:
     layers:
       - { Ref: Boto3LayerLambdaLayer }
     environment:
-      PDF_JOB_SNS_TOPIC_ARN:
-        Ref: SNSTopicPdfExtractionDone
+      PDF_JOB_SNS_TOPIC_ARN: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.snsTopicName}
       LAMBDA_ROLE_ARN: '#{snsAccessRole.Arn}'
     events:
       - s3:
